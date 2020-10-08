@@ -5,18 +5,22 @@ import com.example.opeqe2.utils.SingleLiveData
 
 class MainViewModel : ViewModel() {
 
-    val drawShape = SingleLiveData<Boolean>()
-    val alignHorizontally = SingleLiveData<Boolean>()
+    private val _drawShape = SingleLiveData<Unit>()
+    val drawShape = _drawShape
+    private val _alignHorizontally = SingleLiveData<Unit>()
+    val alignHorizontally = _alignHorizontally
+    private val _alignVertically = SingleLiveData<Unit>()
+    val alignVertically = _alignVertically
 
-    init {
-        drawShape.value = false
+    fun onDrawShapeClicked() {
+        drawShape.value = Unit
     }
 
-    fun drawShape() {
-        drawShape.value = true
+    fun onAlignHorizontallyClicked() {
+        alignHorizontally.value = Unit
     }
 
-    fun alignHorizontally() {
-        alignHorizontally.value = true
+    fun onAlignVerticallyClicked() {
+        alignVertically.value = Unit
     }
 }

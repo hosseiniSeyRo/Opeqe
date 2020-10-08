@@ -2,15 +2,16 @@ package com.example.opeqe2.utils
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import kotlin.math.min
 
-class MyDrawable : Drawable(){
-    private val redPaint: Paint = Paint().apply { setARGB(255, 255, 0, 0) }
+class CircleDrawable : Drawable(){
+    private val redPaint: Paint = Paint().apply { setARGB(255, 76, 175, 80) }
 
     override fun draw(canvas: Canvas) {
         // Get the drawable's bounds
         val width: Int = bounds.width()
         val height: Int = bounds.height()
-        val radius: Float = Math.min(width, height).toFloat() / 2f
+        val radius: Float = min(width, height).toFloat() / 2f
 
         // Draw a red circle in the center
         canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), radius, redPaint)
