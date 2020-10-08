@@ -1,11 +1,8 @@
 package com.example.opeqe2.view.main
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.OvalShape
-import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -17,13 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.opeqe2.R
+import com.example.opeqe2.utils.MyDrawable
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MainFragment()
-    }
 
     private lateinit var viewModel: MainViewModel
     private val imageWidth = 200
@@ -48,21 +42,42 @@ class MainFragment : Fragment() {
 
     private fun clickHandler() {
         btnDrawShape.setOnClickListener { viewModel.drawShape() }
+        btnAlignHorizontally.setOnClickListener { viewModel.alignHorizontally() }
     }
 
     private fun initObservers() {
         viewModel.drawShape.observe(viewLifecycleOwner, Observer {
             when (it) {
                 true -> {
-                    mainLayout.addView(createImageView(createShapeDrawable(OvalShape())))
+                    mainLayout.addView(createImageView(MyDrawable()))
                 }
                 false -> {
                 }
             }
         })
+
+        viewModel.alignHorizontally.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                true -> {
+                    val firstChild = (mainLayout as ViewGroup).getChildAt(0)
+                    addOrRemoveProperty(firstChild, RelativeLayout.ALIGN_PARENT_RIGHT, true)
+                    addOrRemoveProperty(firstChild, RelativeLayout.CENTER_HORIZONTAL, true)
+
+                    for (index in 1 until (mainLayout as ViewGroup).childCount) {
+                        val nextChild = (mainLayout as ViewGroup).getChildAt(index)
+                        Log.e("RHLog", nextChild.id.toString())
+                        val prevChild = (mainLayout as ViewGroup).getChildAt(index - 1)
+                        val params = nextChild.layoutParams as RelativeLayout.LayoutParams
+                        params.addRule(RelativeLayout.LEFT_OF, prevChild.id)
+                        nextChild.layoutParams = params
+                    }
+                }
+            }
+        })
     }
 
-    private fun createImageView(myDrawable: ShapeDrawable): ImageView {
+    @SuppressLint("ClickableViewAccessibility")
+    private fun createImageView(myDrawable: MyDrawable): ImageView {
         val mImageView = ImageView(context)
         mImageView.apply {
             id = View.generateViewId()
@@ -73,22 +88,20 @@ class MainFragment : Fragment() {
         return mImageView
     }
 
-    private fun createShapeDrawable(shape: Shape): ShapeDrawable {
-        val badge = ShapeDrawable(shape)
-        badge.intrinsicWidth = 200
-        badge.intrinsicHeight = 200
-        badge.paint.color = Color.RED
-        return badge
-    }
-
     private fun onTouchListener(): View.OnTouchListener? {
         return View.OnTouchListener(fun(view: View, event: MotionEvent): Boolean {
             val x = event.rawX.toInt()
             val y = event.rawY.toInt()
             when (event.action and MotionEvent.ACTION_MASK) {
                 MotionEvent.ACTION_DOWN -> {
-//                    addOrRemoveProperty(newImageView, RelativeLayout.ALIGN_PARENT_RIGHT, false)
-//                    addOrRemoveProperty(newImageView, RelativeLayout.ALIGN_PARENT_BOTTOM, false)
+                    val firstChild = (mainLayout as ViewGroup).getChildAt(0)
+                    addOrRemoveProperty(firstChild, RelativeLayout.ALIGN_PARENT_RIGHT, false)
+                    addOrRemoveProperty(firstChild, RelativeLayout.CENTER_HORIZONTAL, false)
+
+                    for (index in 1 until (mainLayout as ViewGroup).childCount) {
+                        val nextChild = (mainLayout as ViewGroup).getChildAt(index)
+                        addOrRemoveProperty(nextChild, RelativeLayout.LEFT_OF, false)
+                    }
 
                     val lParams = view.layoutParams as RelativeLayout.LayoutParams
                     xDelta = x - lParams.leftMargin
@@ -114,4 +127,16 @@ class MainFragment : Fragment() {
             return true
         })
     }
+
+    private fun addOrRemoveProperty(view: View, property: Int, flag: Boolean) {
+        val layoutParams: RelativeLayout.LayoutParams =
+            view.layoutParams as RelativeLayout.LayoutParams
+        if (flag) {
+            layoutParams.addRule(property);
+        } else {
+            layoutParams.removeRule(property);
+        }
+        view.layoutParams = layoutParams;
+    }
+
 }

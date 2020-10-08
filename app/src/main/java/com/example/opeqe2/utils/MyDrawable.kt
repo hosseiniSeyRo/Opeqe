@@ -2,22 +2,30 @@ package com.example.opeqe2.utils
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.Shape
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
 
-class MyDrawable {
+class MyDrawable : Drawable(){
+    private val redPaint: Paint = Paint().apply { setARGB(255, 255, 0, 0) }
 
-    private val imageWidth = 200
-    private val imageHeight = 200
+    override fun draw(canvas: Canvas) {
+        // Get the drawable's bounds
+        val width: Int = bounds.width()
+        val height: Int = bounds.height()
+        val radius: Float = Math.min(width, height).toFloat() / 2f
 
-    private fun createShapeDrawable(shape: Shape): ShapeDrawable {
-        val badge = ShapeDrawable(shape)
-        badge.intrinsicWidth = imageWidth
-        badge.intrinsicHeight = imageHeight
-        badge.paint.color = Color.RED
-        return badge
+        // Draw a red circle in the center
+        canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), radius, redPaint)
     }
+
+    override fun setAlpha(alpha: Int) {
+        // This method is required
+    }
+
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        // This method is required
+    }
+
+    override fun getOpacity(): Int =
+        // Must be PixelFormat.UNKNOWN, TRANSLUCENT, TRANSPARENT, or OPAQUE
+        PixelFormat.OPAQUE
+
 }

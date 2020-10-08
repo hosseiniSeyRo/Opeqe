@@ -6,6 +6,7 @@ import com.example.opeqe2.utils.SingleLiveData
 class MainViewModel : ViewModel() {
 
     val drawShape = SingleLiveData<Boolean>()
+    val alignHorizontally = SingleLiveData<Boolean>()
 
     init {
         drawShape.value = false
@@ -13,5 +14,9 @@ class MainViewModel : ViewModel() {
 
     fun drawShape() {
         drawShape.value = true
+    }
+
+    fun alignHorizontally() {
+        alignHorizontally.value = true
     }
 }
