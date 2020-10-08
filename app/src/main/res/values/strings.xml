@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Opeqe2</string>
+    <string name="align_vertically">align vertically</string>
+    <string name="align_horizontally">align horizontally</string>
+    <string name="draw_a_shape">draw a shape</string>
 </resources>
