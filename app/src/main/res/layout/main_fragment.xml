@@ -7,19 +7,12 @@
     android:padding="@dimen/fragment_main_padding"
     tools:context=".view.main.MainFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
-
     <RelativeLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        android:background="@color/mainSectionBG"
+        app:layout_constraintHeight_percent="0.8"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,31 +25,30 @@
         android:text="@string/draw_a_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+        app:layout_constraintTop_toBottomOf="@+id/mainLayout" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnAlignVertically"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/align_vertically"
+        app:layout_constraintBottom_toBottomOf="@+id/btnAlignHorizontally"
+        app:layout_constraintEnd_toStartOf="@+id/btnAlignHorizontally"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDrawShape">
+        app:layout_constraintTop_toBottomOf="@+id/btnDrawShape" />
 
-        <Button
-            android:id="@+id/btnAlignVertically"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/align_vertically" />
-
-        <Button
-            android:id="@+id/btnAlignHorizontally"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/align_horizontally" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnAlignHorizontally"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/align_horizontally"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnAlignVertically"
+        app:layout_constraintTop_toBottomOf="@+id/btnDrawShape" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
